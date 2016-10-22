@@ -1,12 +1,19 @@
-var xhttp = new XMLHttpRequest();
-//Updates table
-function createTable(jsonObject) {
 
-	
+//Updates table
+function createTable() {
+
+	var request = new XMLHttpRequest();
+    request.open('GET', 'service.php', false);
+    request.send();
+
+    if (request.status != 200) {
+      	 alert("Ajax went wrong");
+    }
 
 	//Build array from the jsonObject
 	var customers = new Array();
-	var jsonArr = jsonObject['log'];
+	var jsonArr = JSON.parse(request.responseText);
+	//var jsonArr = jsonObject['log'];
 	for(var i in jsonArr){
 		customers.push((jsonArr[i]['date']) );
 		customers.push((jsonArr[i]['time']) );
@@ -17,7 +24,6 @@ function createTable(jsonObject) {
 	//Remove existing tables.
 	var myNode = document.getElementById('logDiv');
 	while (myNode.hasChildNodes()) {
-			alert("logDiv has nodes, removing them now!")
   	   		myNode.removeChild(myNode.firstChild);
 	}
 

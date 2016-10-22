@@ -19,7 +19,7 @@ def send_email(subject, body):
 	smtp_user = ""
 	smpt_pass = ""
 	
-	to_add = ""
+	to_add = "anton.gustafsson@protonmail.com"
 	from_add = smtp_user
 	
 	header = "To: " + to_add + '\n' + "From: " + from_add + '\n' + subject
@@ -42,11 +42,7 @@ def logging_monitoring(message, temp, hum):
 	message = "%s %s: %s " % (current_date, current_time, message)
 	logging.basicConfig(filename='humid.log',level=logging.INFO, format='%(message)s')
 	
-	logging.info('{{"date":"{}", "time":"{}","temp":"{}", "humidity":"{}" }}'.format(current_date, current_time, temp , hum))
-	
-	
-	#data_string = 'Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temperature, humidity)
-	#logging.info(message + '\n')
+	logging.info('{{"date":"{}", "time":"{}","temp":"{}", "humidity":"{}" }},'.format(current_date, current_time, temp , hum))
 	print (message)
 	
 #Checks temperatures if no mail has been sent within 7 hours
@@ -54,13 +50,13 @@ def check_temperature(temperature, mail_sent_temp):
 	if(mail_sent_temp == 0):
 		if temperature <= 10:
 			send_email("Cold","Temperature is now 10 or less degrees celcius, your flowers aren't happy")
-			mail_sent_temp = 100
+			mail_sent_temp = 6
 		elif(temperature>=32):
 			send_email("Hot", "Temperature is now 32 or more degrees celcius, your flowers aren't happy")
-			mail_sent_temp = 100
+			mail_sent_temp = 6
 		elif(temperature>=42):
 			send_email("Hotter than hell", "Temperature is now 45 or more degrees celcius, your flowers are dying!")
-			mail_sent_temp = 100
+			mail_sent_temp = 6
 		
 	return mail_sent_temp
 
@@ -69,7 +65,7 @@ def check_humidity(humidity, mail_sent_hum):
 	if mail_sent_hum == 0:
 		if humidity < 65:
 			send_email("Thirsty","Tomatoes need water")
-			mail_sent_hum = 100	
+			mail_sent_hum = 6	
 	return mail_sent_hum
 	
 #Increases timer if email has been sent
@@ -92,7 +88,7 @@ try:
 		mail_sent_temp = check_temperature(temperature, mail_sent_temp)
 		mail_sent_hum = check_humidity(humidity, mail_sent_hum)
 		mail_sent_temp, mail_sent_hum = check_timer(mail_sent_temp, mail_sent_hum)
-		time.sleep(1800) 
+		time.sleep(3600) 
 		
 except KeyboardInterrupt:  	
 	GPIO.output(13,False)	
